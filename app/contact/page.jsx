@@ -23,19 +23,19 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+1 (555) 123-4567", "+1 (555) 987-6543"],
+    details: ["+92 0306-9293923"],
     description: "Mon-Fri from 8am to 8pm",
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["info@megatechsolution.com", "support@megatechsolution.com"],
+    details: ["megatechsolution1348@hotmail.com"],
     description: "We reply within 24 hours",
   },
   {
     icon: MapPin,
     title: "Address",
-    details: ["123 Tech Street", "Silicon Valley, CA 94025"],
+    details: ["office No 3 Ameer Mall New City Phase 2 , Wah, Pakistan, 47010"],
     description: "Visit our showroom",
   },
   {
