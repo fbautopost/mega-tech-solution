@@ -266,7 +266,7 @@ export default function ContactPage() {
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-5 w-5 text-primary" />
-                      <p className="text-sm text-foreground font-medium">123 Tech Street, Silicon Valley, CA 94025</p>
+                      <p className="text-sm text-foreground font-medium">office No 3 Ameer Mall New City Phase 2 , Wah, Pakistan, 47010</p>
                     </div>
                   </CardContent>
                 </Card>
