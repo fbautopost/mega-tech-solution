@@ -90,7 +90,7 @@ export default function ServicesPage() {
                   <Link href="/contact">Get a Quote</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="tel:+15551234567">Call for Support</Link>
+                  <Link href="tel:92-3069293923">Call for Support</Link>
                 </Button>
               </div>
             </div>
@@ -172,13 +172,13 @@ export default function ServicesPage() {
                         <p className="font-semibold text-foreground">+1 (555) 123-4567</p>
                       </div>
                       <Button size="sm" asChild>
-                        <Link href="tel:+15551234567">Call</Link>
+                        <Link href="tel:92-3069293923">Call</Link>
                       </Button>
                     </div>
                     <div className="flex items-center justify-between rounded-lg bg-secondary/50 p-4">
                       <div>
                         <p className="text-sm text-muted-foreground">Email Us</p>
-                        <p className="font-semibold text-foreground">support@megatech.com</p>
+                        <p className="font-semibold text-foreground">megatechsolution@hotmail.com</p>
                       </div>
                       <Button size="sm" variant="outline" asChild>
                         <Link href="/contact">Contact</Link>
