@@ -169,7 +169,7 @@ export default function ServicesPage() {
                     <div className="flex items-center justify-between rounded-lg bg-secondary/50 p-4">
                       <div>
                         <p className="text-sm text-muted-foreground">Call Us</p>
-                        <p className="font-semibold text-foreground">+1 (555) 123-4567</p>
+                        <p className="font-semibold text-foreground">92-3069293923</p>
                       </div>
                       <Button size="sm" asChild>
                         <Link href="tel:92-3069293923">Call</Link>
