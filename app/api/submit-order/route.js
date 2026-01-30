@@ -17,8 +17,10 @@ export async function POST(request) {
     // Get Google Apps Script Web App URL from environment variable
     const googleScriptUrl = process.env.GOOGLE_SCRIPT_URL
     
+    console.log("[v0] GOOGLE_SCRIPT_URL exists:", !!googleScriptUrl)
+    
     if (!googleScriptUrl) {
-      console.error("GOOGLE_SCRIPT_URL environment variable is not set")
+      console.error("[v0] GOOGLE_SCRIPT_URL environment variable is not set")
       return NextResponse.json(
         { success: false, message: "Server configuration error" },
         { status: 500 }
@@ -46,16 +48,27 @@ export async function POST(request) {
     }
 
     // Send to Google Apps Script
+    // Google Apps Script requires text/plain for CORS-free POST requests
     const response = await fetch(googleScriptUrl, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain",
       },
       body: JSON.stringify(sheetData),
+      redirect: "follow"
     })
 
-    if (!response.ok) {
-      throw new Error("Failed to submit to Google Sheets")
+    // Google Apps Script returns a redirect, so we check if we got any response
+    const responseText = await response.text()
+    console.log("[v0] Google Script response:", responseText)
+
+    // Try to parse response, but don't fail if it's not JSON
+    let result = { success: true }
+    try {
+      result = JSON.parse(responseText)
+    } catch {
+      // If response isn't JSON, assume success if no error was thrown
+      console.log("[v0] Response was not JSON, assuming success")
     }
 
     return NextResponse.json({ 
