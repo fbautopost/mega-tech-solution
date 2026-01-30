@@ -152,7 +152,7 @@ export function CartDrawer() {
 
               <SheetFooter className="flex-col gap-2 sm:flex-col">
                 <Button className="w-full" size="lg" asChild>
-                  <Link href="/contact" onClick={closeCart}>
+                  <Link href="/checkout" onClick={closeCart}>
                     Proceed to Checkout
                   </Link>
                 </Button>
