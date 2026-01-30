@@ -21,9 +21,12 @@ import {
   Truck,
   Shield,
   RefreshCw,
-  Headphones
+  Headphones,
+  Check
 } from "lucide-react"
 import { products, categories as baseCategories } from "@/lib/products-data"
+import { useCart } from "@/context/cart-context"
+import { toast } from "sonner"
 
 const categoryIcons = {
   "all": Filter,
@@ -48,6 +51,25 @@ const benefits = [
 
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const { addItem, items } = useCart()
+
+  const handleAddToCart = (product) => {
+    addItem(product)
+    toast.success(`${product.name} added to cart`, {
+      description: `Rs. ${product.price.toLocaleString()}`,
+      action: {
+        label: "View Cart",
+        onClick: () => {
+          // The cart will open from the header
+          document.querySelector('[aria-label="Shopping cart"]')?.click()
+        }
+      }
+    })
+  }
+
+  const isInCart = (productId) => {
+    return items.some(item => item.id === productId)
+  }
 
   const filteredProducts = activeCategory === "all" 
     ? products 
@@ -163,9 +185,23 @@ export default function ProductsPage() {
                         )}
                       </div>
                     </div>
-                    <Button className="mt-4 w-full gap-2" size="sm">
-                      <ShoppingCart className="h-4 w-4" />
-                      Add to Cart
+                    <Button 
+                      className="mt-4 w-full gap-2" 
+                      size="sm"
+                      variant={isInCart(product.id) ? "secondary" : "default"}
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      {isInCart(product.id) ? (
+                        <>
+                          <Check className="h-4 w-4" />
+                          Add More
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="h-4 w-4" />
+                          Add to Cart
+                        </>
+                      )}
                     </Button>
                   </CardContent>
                 </Card>
