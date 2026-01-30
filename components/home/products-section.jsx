@@ -6,15 +6,29 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ShoppingCart, Star } from "lucide-react"
+import { ShoppingCart, Star, Check } from "lucide-react"
 import { products, categories } from "@/lib/products-data"
+import { useCart } from "@/context/cart-context"
+import { toast } from "sonner"
 
 export function ProductsSection() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const { addItem, items } = useCart()
 
   const filteredProducts = activeCategory === "all" 
     ? products 
     : products.filter(p => p.category === activeCategory)
+
+  const handleAddToCart = (product) => {
+    addItem(product)
+    toast.success(`${product.name} added to cart`, {
+      description: `Rs. ${product.price.toLocaleString()}`
+    })
+  }
+
+  const isInCart = (productId) => {
+    return items.some(item => item.id === productId)
+  }
 
   return (
     <section id="products" className="py-16 lg:py-24">
@@ -77,9 +91,23 @@ export function ProductsSection() {
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-0">
-                <Button className="w-full gap-2" size="sm">
-                  <ShoppingCart className="h-4 w-4" />
-                  Add to Cart
+                <Button 
+                  className="w-full gap-2" 
+                  size="sm"
+                  variant={isInCart(product.id) ? "secondary" : "default"}
+                  onClick={() => handleAddToCart(product)}
+                >
+                  {isInCart(product.id) ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Add More
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </>
+                  )}
                 </Button>
               </CardFooter>
             </Card>

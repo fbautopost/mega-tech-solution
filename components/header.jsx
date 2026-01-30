@@ -4,9 +4,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, ShoppingCart } from "lucide-react"
-import { Monitor } from "lucide-react" // Import Monitor component
+import { useCart } from "@/context/cart-context"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -17,6 +18,7 @@ const navigation = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { itemCount, openCart } = useCart()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -50,23 +52,42 @@ export function Header() {
 
         {/* Desktop CTA */}
         <div className="hidden items-center gap-4 md:flex">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
             <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Shopping cart</span>
+            {itemCount > 0 && (
+              <Badge 
+                className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center"
+              >
+                {itemCount > 99 ? "99+" : itemCount}
+              </Badge>
+            )}
+            <span className="sr-only">Shopping cart ({itemCount} items)</span>
           </Button>
           <Button asChild>
-            <Link href="/#products">Shop Now</Link>
+            <Link href="/products">Shop Now</Link>
           </Button>
         </div>
 
-        {/* Mobile Menu */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </SheetTrigger>
+        {/* Mobile Cart & Menu */}
+        <div className="flex items-center gap-2 md:hidden">
+          <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
+            <ShoppingCart className="h-5 w-5" />
+            {itemCount > 0 && (
+              <Badge 
+                className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center"
+              >
+                {itemCount > 99 ? "99+" : itemCount}
+              </Badge>
+            )}
+            <span className="sr-only">Shopping cart ({itemCount} items)</span>
+          </Button>
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
           <SheetContent side="right" className="w-[300px] bg-background">
             <div className="flex flex-col gap-6 pt-6">
               <div className="flex items-center justify-between">
@@ -94,11 +115,12 @@ export function Header() {
                 ))}
               </nav>
               <Button asChild className="w-full" onClick={() => setIsOpen(false)}>
-                <Link href="/#products">Shop Now</Link>
+                <Link href="/products">Shop Now</Link>
               </Button>
             </div>
           </SheetContent>
         </Sheet>
+        </div>
       </div>
     </header>
   )
