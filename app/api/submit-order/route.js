@@ -34,18 +34,18 @@ export async function POST(request) {
 
     // Prepare data for Google Sheets
     const sheetData = {
-      timestamp: new Date,"PK",timeZone: "Karachi",
-      name,
-      email,
-      phone,
-      city,
-      address,
-      items: itemsString,
-      totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
-      subtotal: `Rs. ${subtotal.toLocaleString()}`,
-      notes: orderData.notes || "",
-      status: "New"
-    }
+  timestamp: getPakistanTimestamp(), // 🇵🇰 PK time (12-hour)
+  name,
+  email,
+  phone,
+  city,
+  address,
+  items: itemsString,
+  totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
+  subtotal: `Rs. ${subtotal.toLocaleString()}`,
+  notes: orderData.notes || "",
+  status: "New"
+}
 
     // Send to Google Apps Script
     // Google Apps Script requires text/plain for CORS-free POST requests
