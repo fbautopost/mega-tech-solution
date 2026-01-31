@@ -18,6 +18,7 @@ import {
   CheckCircle,
   MessageSquare
 } from "lucide-react"
+import { toast } from "sonner"
 
 const contactInfo = [
   {
@@ -80,12 +81,30 @@ export default function ContactPage() {
     e.preventDefault()
     setIsLoading(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setIsLoading(false)
-    setIsSubmitted(true)
-    setFormState({ name: "", email: "", phone: "", subject: "", message: "" })
+    try {
+      const response = await fetch("/api/submit-contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setIsSubmitted(true)
+        setFormState({ name: "", email: "", phone: "", subject: "", message: "" })
+        toast.success("Message sent successfully!")
+      } else {
+        toast.error(result.message || "Failed to send message")
+      }
+    } catch (error) {
+      console.error("Contact form error:", error)
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleChange = (e) => {
