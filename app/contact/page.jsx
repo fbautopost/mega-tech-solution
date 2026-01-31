@@ -18,6 +18,7 @@ import {
   CheckCircle,
   MessageSquare
 } from "lucide-react"
+import { toast } from "sonner"
 
 const contactInfo = [
   {
@@ -80,12 +81,30 @@ export default function ContactPage() {
     e.preventDefault()
     setIsLoading(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setIsLoading(false)
-    setIsSubmitted(true)
-    setFormState({ name: "", email: "", phone: "", subject: "", message: "" })
+    try {
+      const response = await fetch("/api/submit-contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setIsSubmitted(true)
+        setFormState({ name: "", email: "", phone: "", subject: "", message: "" })
+        toast.success("Message sent successfully!")
+      } else {
+        toast.error(result.message || "Failed to send message")
+      }
+    } catch (error) {
+      console.error("Contact form error:", error)
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -174,7 +193,7 @@ export default function ContactPage() {
                           <Input
                             id="name"
                             name="name"
-                            placeholder="John Doe"
+                            placeholder="Ali"
                             value={formState.name}
                             onChange={handleChange}
                             required
@@ -186,7 +205,7 @@ export default function ContactPage() {
                             id="email"
                             name="email"
                             type="email"
-                            placeholder="john@example.com"
+                            placeholder="ali@example.com"
                             value={formState.email}
                             onChange={handleChange}
                             required
@@ -200,7 +219,7 @@ export default function ContactPage() {
                             id="phone"
                             name="phone"
                             type="tel"
-                            placeholder="+1 (555) 000-0000"
+                            placeholder="+92 (306) 00000000"
                             value={formState.phone}
                             onChange={handleChange}
                           />
