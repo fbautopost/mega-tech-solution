@@ -34,7 +34,7 @@ export async function POST(request) {
 
     // Prepare data for Google Sheets
     const sheetData = {
-      timestamp: new Date().toLocaleString("en-PK", { timeZone: "Asia/Karachi" }),
+      timestamp: new Date().toLocaleString("PK", { timeZone: "Karachi" }),
       name,
       email,
       phone,
