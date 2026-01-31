@@ -17,10 +17,10 @@ export async function POST(request) {
     // Get Google Apps Script Web App URL from environment variable
     const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyfQADQ2Q-D5eD5ktsU05HU9pw8lxPnh2xXhwnGXse22euG-K0d3CyY-WpGq_qKOtfx/exec"
     
-    console.log("https://script.google.com/macros/s/AKfycbyfQADQ2Q-D5eD5ktsU05HU9pw8lxPnh2xXhwnGXse22euG-K0d3CyY-WpGq_qKOtfx/exec", !!googleScriptUrl)
+    console.log("[Google Script] Response was not JSON, assuming success")", !!googleScriptUrl)
     
     if (!googleScriptUrl) {
-      console.error("["https://script.google.com/macros/s/AKfycbyfQADQ2Q-D5eD5ktsU05HU9pw8lxPnh2xXhwnGXse22euG-K0d3CyY-WpGq_qKOtfx/exec"] GOOGLE_SCRIPT_URL environment variable is not set")
+      console.error("[Google Script] URL is not set")
       return NextResponse.json(
         { success: false, message: "Server configuration error" },
         { status: 500 }
@@ -60,7 +60,7 @@ export async function POST(request) {
 
     // Google Apps Script returns a redirect, so we check if we got any response
     const responseText = await response.text()
-    console.log("["https://script.google.com/macros/s/AKfycbyfQADQ2Q-D5eD5ktsU05HU9pw8lxPnh2xXhwnGXse22euG-K0d3CyY-WpGq_qKOtfx/exec"] Google Script response:", responseText)
+    console.log("[Google Script] Response:", responseText)
 
     // Try to parse response, but don't fail if it's not JSON
     let result = { success: true }
@@ -68,7 +68,7 @@ export async function POST(request) {
       result = JSON.parse(responseText)
     } catch {
       // If response isn't JSON, assume success if no error was thrown
-      console.log("["https://script.google.com/macros/s/AKfycbyfQADQ2Q-D5eD5ktsU05HU9pw8lxPnh2xXhwnGXse22euG-K0d3CyY-WpGq_qKOtfx/exec"] Response was not JSON, assuming success")
+      console.log("[Google Script] Response was not JSON, assuming success")
     }
 
     return NextResponse.json({ 
