@@ -13,7 +13,7 @@ export async function POST(request) {
     }
 
     // Get Google Apps Script Web App URL from environment variable
-    const googleScriptUrl = process.env.GOOGLE_CONTACT_SCRIPT_URL
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"
     
     console.log("[v0] GOOGLE_CONTACT_SCRIPT_URL exists:", !!googleScriptUrl)
     console.log("[v0] URL value:", googleScriptUrl ? "Set" : "Not set")
