@@ -15,18 +15,18 @@ export async function POST(request) {
     // Get Google Apps Script Web App URL from environment variable
     const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"
     
-    console.log("[v0] GOOGLE_CONTACT_SCRIPT_URL exists:", !!googleScriptUrl)
+    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] GOOGLE_CONTACT_SCRIPT_URL exists:", !!googleScriptUrl)
     console.log("[v0] URL value:", googleScriptUrl ? "Set" : "Not set")
     
     if (!googleScriptUrl) {
-      console.error("[v0] GOOGLE_CONTACT_SCRIPT_URL environment variable is not set")
+      console.error("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] GOOGLE_CONTACT_SCRIPT_URL environment variable is not set")
       return NextResponse.json(
         { success: false, message: "Server configuration error - Contact script URL not configured" },
         { status: 500 }
       )
     }
     
-    console.log("[v0] Submitting contact form data:", JSON.stringify(data))
+    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Submitting contact form data:", JSON.stringify(data))
 
     // Prepare data for Google Sheets
     const sheetData = {
@@ -38,7 +38,7 @@ export async function POST(request) {
     }
 
     // Send to Google Apps Script
-    console.log("[v0] Sending to Google Script URL...")
+    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Sending to Google Script URL...")
     const response = await fetch(googleScriptUrl, {
       method: "POST",
       headers: {
@@ -49,16 +49,16 @@ export async function POST(request) {
     })
 
     const responseText = await response.text()
-    console.log("[v0] Google Script response:", responseText)
+    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Google Script response:", responseText)
     
     // Try to parse response
     let result = { success: true }
     try {
       result = JSON.parse(responseText)
-      console.log("[v0] Parsed result:", result)
+      console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Parsed result:", result)
     } catch {
       // If response isn't JSON, assume success
-      console.log("[v0] Response was not JSON, assuming success")
+      console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Response was not JSON, assuming success")
     }
 
     return NextResponse.json({ 
