@@ -268,7 +268,7 @@ export default function ContactPage() {
 
               {/* Map / FAQ Section */}
               <div className="space-y-6">
-                {/* Map Placeholder */}
+                {/* https://www.google.com/maps/place/Ameer+Mall/@33.7519976,72.7404517,17z/data=!3m1!4b1!4m6!3m5!1s0x38dfa70033d64fa3:0xa478892c183bf65e!8m2!3d33.7519976!4d72.7404517!16s%2Fg%2F11xh9qtvsv?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoASAFQAw%3D%3D" */}
                 <Card className="border-border overflow-hidden">
                   <div className="relative h-[250px] bg-muted">
                     <iframe
