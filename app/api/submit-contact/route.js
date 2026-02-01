@@ -26,12 +26,12 @@ export async function POST(request) {
 
     // Prepare data for Google Sheets
     const sheetData = {
+      timestamp: new Date().toISOString(),
       name: data.name,
       email: data.email,
       phone: data.phone || "Not provided",
       subject: data.subject,
       message: data.message,
-      timestamp: new Date().toISOString(),
     }
 
     console.log("Sending data to Google Script:", sheetData)
