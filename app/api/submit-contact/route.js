@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 export async function POST(request) {
   try {
     const data = await request.json()
-    
+
     // Validate required fields
     if (!data.name || !data.email || !data.subject || !data.message) {
       return NextResponse.json(
@@ -12,21 +12,17 @@ export async function POST(request) {
       )
     }
 
-    // Get Google Apps Script Web App URL from environment variable
+    // Use ENV variable (BEST PRACTICE)
     const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"
-    
-    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] GOOGLE_CONTACT_SCRIPT_URL exists:", !!googleScriptUrl)
-    console.log("[v0] URL value:", googleScriptUrl ? "Set" : "Not set")
-    
+    console.log("GOOGLE_CONTACT_SCRIPT_URL exists:", !!googleScriptUrl)
+
     if (!googleScriptUrl) {
-      console.error("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] GOOGLE_CONTACT_SCRIPT_URL environment variable is not set")
+      console.error("GOOGLE_CONTACT_SCRIPT_URL is not set")
       return NextResponse.json(
-        { success: false, message: "Server configuration error - Contact script URL not configured" },
+        { success: false, message: "Server configuration error" },
         { status: 500 }
       )
     }
-    
-    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Submitting contact form data:", JSON.stringify(data))
 
     // Prepare data for Google Sheets
     const sheetData = {
@@ -35,35 +31,40 @@ export async function POST(request) {
       phone: data.phone || "Not provided",
       subject: data.subject,
       message: data.message,
+      timestamp: new Date().toISOString(),
     }
 
-    // Send to Google Apps Script
-    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Sending to Google Script URL...")
+    console.log("Sending data to Google Script:", sheetData)
+
     const response = await fetch(googleScriptUrl, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(sheetData),
-      redirect: "follow"
+      redirect: "follow",
     })
 
     const responseText = await response.text()
-    console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Google Script response:", responseText)
-    
-    // Try to parse response
-    let result = { success: true }
+    console.log("Google Script raw response:", responseText)
+
+    let result
     try {
       result = JSON.parse(responseText)
-      console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Parsed result:", result)
     } catch {
-      // If response isn't JSON, assume success
-      console.log("[https://script.google.com/macros/s/AKfycbwIWXKtSoYqmbWgx2lDJA96_LKxtJGvmUnqTkv4nvm6Bz1sP_FZCXWbi1GXT0hbQmpCIA/exec"] Response was not JSON, assuming success")
+      result = { success: true }
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Message sent successfully" 
+    if (!response.ok || result.success === false) {
+      return NextResponse.json(
+        { success: false, message: "Failed to save message" },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Message sent successfully",
     })
 
   } catch (error) {
